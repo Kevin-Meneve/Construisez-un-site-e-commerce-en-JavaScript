@@ -18,7 +18,7 @@ fetch (`http://localhost:3000/api/products/${idURL}`)
 
 //Gestion d'ajout au panier
 let buttonAjoutPanier = document.getElementById("addToCart");
-buttonAjoutPanier.addEventListener('click',ajoutPanier());
+buttonAjoutPanier.addEventListener('click',ajoutPanier); // VOIR ICI !
 
 
 
@@ -36,12 +36,26 @@ function infosCanape(Canape){
 //Ajoute les information du cannapé dans le local storage
 function ajoutPanier(){
     
-    
-    //let infosChoix = {
-        //id = idURL,
-        //quantite = 
-        //color = 
-    //}
-    //let stringAjoutPanier = JSON.stringify(ajoutPanier);
-    //localStorage.setItem("article" , stringAjoutPanier);
+    //Récupère les valeurs de l'ajout du pannier
+    let choix = {
+        id : idURL,
+        quantity :  document.getElementById("quantity").value,
+        color : document.getElementById("colors").value
+    }
+    let unique = true; //boolean qui vérifie si l'article est unique dans le local storage
+
+    for ( let i=0 ; i < localStorage.length ; i++){
+        let local = JSON.parse(localStorage.getItem(`article ${i}`));
+        if(local.id == choix.id && local.color == choix.color){
+            unique = false;
+            choix.quantity = parseInt(choix.quantity) + parseInt(local.quantity);
+            let stringAjoutPanier = JSON.stringify(choix);
+            localStorage.setItem(`article ${i}` , stringAjoutPanier);
+            break;
+        }
+    }
+    if (unique == true){
+    let stringAjoutPanier = JSON.stringify(choix);
+    localStorage.setItem(`article ${localStorage.length}` , stringAjoutPanier);
+    }
 }
