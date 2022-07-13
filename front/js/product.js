@@ -18,7 +18,9 @@ fetch (`http://localhost:3000/api/products/${idURL}`)
 
 //Gestion d'ajout au panier
 let buttonAjoutPanier = document.getElementById("addToCart");
-buttonAjoutPanier.addEventListener('click',ajoutPanier); // VOIR ICI !
+buttonAjoutPanier.addEventListener('click',function () {
+    ajoutPanier();
+}   );
 
 
 
