@@ -44,6 +44,21 @@ function ajoutPanier(){
         quantity :  document.getElementById("quantity").value,
         color : document.getElementById("colors").value
     }
+
+    //Test couleur 
+    if(choix.color == "")
+    {
+        alert("Choisissez une couleur pour votre commande");
+        return 0;
+    }
+
+    //Test quantité 
+    if (!(0 < parseInt(choix.quantity) && parseInt(choix.quantity) < 101)){
+        alert("Veuillez choisir une quantité différente pour votre commande ( entre 1 et 100 ) ");
+        return 0;
+    }
+
+
     let unique = true; //boolean qui vérifie si l'article est unique dans le local storage
 
     for ( let i=0 ; i < localStorage.length ; i++){
@@ -51,6 +66,13 @@ function ajoutPanier(){
         if(local.id == choix.id && local.color == choix.color){
             unique = false;
             choix.quantity = parseInt(choix.quantity) + parseInt(local.quantity);
+
+            //Test quantité totale 
+            if (parseInt(choix.quantity) > 101){
+                alert("la quantité totale commandé pour ce canapé dépasse la valeure maximale (100)");
+                return 0;
+            }
+            
             let stringAjoutPanier = JSON.stringify(choix);
             localStorage.setItem(`article ${i}` , stringAjoutPanier);
             break;
