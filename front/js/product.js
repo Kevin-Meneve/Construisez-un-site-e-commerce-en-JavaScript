@@ -85,7 +85,6 @@ function ajoutPanier(){
     }
     if (unique == true){
     tabAchat.push(choix);
-    console.log(tabAchat);
     let stringAjoutPanier = JSON.stringify(tabAchat);
     localStorage.setItem(`article` , stringAjoutPanier);
     alert(`Le produit a bien été ajouté au panier`);
