@@ -61,9 +61,7 @@ function ajoutPanier(){
     let tabAchat = JSON.parse(localStorage.getItem("article")); // récupère les valeurs du local storage et le met dans tabAchat
 
     if(tabAchat == null){
-        tabAchat = [choix];
-        alert(`Le produit a bien été ajouté au panier`);
-        return 0;
+        tabAchat = []
     }
     let unique = true; //boolean qui vérifie si l'article est unique dans le local storage
 
@@ -81,7 +79,7 @@ function ajoutPanier(){
             
             let stringAjoutPanier = JSON.stringify(tabAchat);
             localStorage.setItem(`article` , stringAjoutPanier);
-            alert(`La quantité du produit selectionné a été ajouté à la quantité déjà selectionné dans le panier pour un totale de ${choix.quantity}`);
+            alert(`La quantité du produit selectionné a été ajouté à la quantité déjà selectionné dans le panier pour un totale de ${tabAchat[i].quantity}`);
             break;
         }
     }
