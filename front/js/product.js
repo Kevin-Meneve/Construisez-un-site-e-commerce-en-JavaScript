@@ -9,8 +9,8 @@ fetch (`http://localhost:3000/api/products/${idURL}`)
         return res.json();
         }
     })
-    .then(function(Canape){
-        infosCanape(Canape); //Affichage des informations du produit sur la page product
+    .then(function(canape){
+        infosCanape(canape); //Affichage des informations du produit sur la page product
     })
     .catch(function(err) {
         // Une erreur est survenue
@@ -25,13 +25,13 @@ buttonAjoutPanier.addEventListener('click',function () {
 
 
 //Affichage des informations du produit sur la page product
-function infosCanape(Canape){
-    document.querySelector(".item__img").innerHTML = `<img src="${Canape.imageUrl}" alt="${Canape.altTxt}">`;
-    document.getElementById("title").innerHTML = `${Canape.name}`;
-    document.getElementById("price").innerHTML = `${Canape.price}`;
-    document.getElementById("description").innerHTML = `${Canape.description}`;
-    for(let index in Canape.colors){
-        document.getElementById("colors").innerHTML += `<option value="${Canape.colors[index]}">${Canape.colors[index]}</option>`;
+function infosCanape(canape){
+    document.querySelector(".item__img").innerHTML = `<img src="${canape.imageUrl}" alt="${canape.altTxt}">`;
+    document.getElementById("title").innerHTML = `${canape.name}`;
+    document.getElementById("price").innerHTML = `${canape.price}`;
+    document.getElementById("description").innerHTML = `${canape.description}`;
+    for(let index in canape.colors){
+        document.getElementById("colors").innerHTML += `<option value="${canape.colors[index]}">${canape.colors[index]}</option>`;
     }
 }
 
@@ -58,28 +58,38 @@ function ajoutPanier(){
         return 0;
     }
 
+    let tabAchat = JSON.parse(localStorage.getItem("article")); // récupère les valeurs du local storage et le met dans tabAchat
 
+    if(tabAchat == null){
+        tabAchat = [choix];
+        alert(`Le produit a bien été ajouté au panier`);
+        return 0;
+    }
     let unique = true; //boolean qui vérifie si l'article est unique dans le local storage
 
-    for ( let i=0 ; i < localStorage.length ; i++){
-        let local = JSON.parse(localStorage.getItem(`article ${i}`));
-        if(local.id == choix.id && local.color == choix.color){
+    for ( let i=0 ; i < tabAchat.length ; i++){
+        if(tabAchat[i].id == choix.id && tabAchat[i].color == choix.color){
             unique = false;
-            choix.quantity = parseInt(choix.quantity) + parseInt(local.quantity);
+            tabAchat[i].quantity = parseInt(choix.quantity) + parseInt(tabAchat[i].quantity);
 
             //Test quantité totale 
-            if (parseInt(choix.quantity) > 101){
-                alert("la quantité totale commandé pour ce canapé dépasse la valeure maximale (100)");
+            if (parseInt(tabAchat[i].quantity) > 101){
+                alert(`Ajout refusé ! la quantité totale commandé ${choix.quantity} pour ce canapé dépasse la valeure maximale (100)`);
                 return 0;
             }
             
-            let stringAjoutPanier = JSON.stringify(choix);
-            localStorage.setItem(`article ${i}` , stringAjoutPanier);
+            
+            let stringAjoutPanier = JSON.stringify(tabAchat);
+            localStorage.setItem(`article` , stringAjoutPanier);
+            alert(`La quantité du produit selectionné a été ajouté à la quantité déjà selectionné dans le panier pour un totale de ${choix.quantity}`);
             break;
         }
     }
     if (unique == true){
-    let stringAjoutPanier = JSON.stringify(choix);
-    localStorage.setItem(`article ${localStorage.length}` , stringAjoutPanier);
+    tabAchat.push(choix);
+    console.log(tabAchat);
+    let stringAjoutPanier = JSON.stringify(tabAchat);
+    localStorage.setItem(`article` , stringAjoutPanier);
+    alert(`Le produit a bien été ajouté au panier`);
     }
 }
