@@ -1,7 +1,5 @@
 let tabAchat = JSON.parse(localStorage.getItem("article")); // récupère les valeurs du local storage et le met dans tabAchat
-
 for ( let i=0 ; i < tabAchat.length ; i++){
-
     fetch (`http://localhost:3000/api/products/${tabAchat[i].id}`)
         .then(function(res) {
             if (res.ok) {
@@ -15,14 +13,20 @@ for ( let i=0 ; i < tabAchat.length ; i++){
             // Une erreur est survenue
         });
 }
+console.log("test0");
+//document.addEventListener("DOMContentLoaded", function(e) {
+let quantity = document.querySelectorAll(".itemQuantity");
+console.log("test1");
+console.log(quantity);
+quantity.forEach((article)=>
+    console.log("test"));
 
-document.addEventListener("DOMContentLoaded", function(e) {
-    let itemQuantity = document.getElementsByClassName("itemQuantity");
+    /*
     console.log(itemQuantity, itemQuantity.length);
     for (let i = 0; i < itemQuantity.length; i++) {
         console.log(itemQuantity[i]);
-    }
-});
+    }*/
+//});
 
     /*element.addEventListener("change", (e) => {
         console.log("changement fait ");
@@ -39,6 +43,7 @@ deleteItem.forEach(element => {
 
 
 //Gestion de l'envoit de l'a commande
+
 let commande = document.getElementById("order");
 commande.addEventListener('click',function (event) {
     event.preventDefault();  
@@ -50,26 +55,27 @@ function affichagePanier(i, canape){
     let tabAchat = JSON.parse(localStorage.getItem("article")); // récupère les valeurs du local storage et le met dans tabAchat
     document.getElementById("cart__items").innerHTML +=
             `<article class="cart__item" data-id="${tabAchat[i].id}" data-color="${tabAchat[i].color}">
-                <div class="cart__item__img">
-                    <img src="${canape.imageUrl}" alt="${canape.altTxt}">
+            <div class="cart__item__img">
+              <img src="${canape.imageUrl}" alt="${canape.altTxt}">
+            </div>
+            <div class="cart__item__content">
+              <div class="cart__item__content__description">
+                <h2>${canape.name}</h2>
+                <p>${tabAchat[i].color}</p>
+                <p>${canape.price} €</p>
+              </div>
+              <div class="cart__item__content__settings">
+                <div class="cart__item__content__settings__quantity">
+                  <p>Qté : </p>
+                  <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${tabAchat[i].quantity}">
                 </div>
-                <div class="cart__item__content">
-                    <div class="cart__item__content__description">
-                        <h2>${canape.name}</h2>
-                        <p>${tabAchat[i].color}</p>
-                        <p>${canape.price}€</p>
-                    </div>
-                    <div class="cart__item__content__settings">
-                        <div class="cart__item__content__settings__quantity">
-                            <p>Qté : </p>
-                            <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${tabAchat[i].quantity}">
-                        </div>
-                        <div class="cart__item__content__settings__delete">
-                            <p class="deleteItem">Supprimer</p>
-                        </div>
-                    </div>
+                <div class="cart__item__content__settings__delete">
+                  <p class="deleteItem">Supprimer</p>
                 </div>
-            </article>`
+              </div>
+            </div>
+          </article>
+          `
 }
 
 async function passageCommande(){
@@ -85,7 +91,6 @@ async function passageCommande(){
     for (i = 0; i<tabArticle.length; i++){
         tabProduct.push(tabArticle[i].id);
     }
-    console.log(tabProduct);
 
     let response = await fetch("http://localhost:3000/api/products/order", {
         method : "POST",
