@@ -8,51 +8,28 @@ for ( let i=0 ; i < tabAchat.length ; i++){
         })
         .then(function(canape){
             affichagePanier(i, canape); //Affichage des informations du produit sur la page product
+            
+            if(i == tabAchat.length-1){
+                let modifyQuantity = document.querySelectorAll(".itemQuantity");
+                modifyQuantity.forEach((article)=>
+                    modifyQuantity(article),
+                )
+            } 
         })
         .catch(function(err) {
             // Une erreur est survenue
         });
 }
-console.log("test0");
-//document.addEventListener("DOMContentLoaded", function(e) {
-let quantity = document.querySelectorAll(".itemQuantity");
-console.log("test1");
-console.log(quantity);
-quantity.forEach((article)=>
-    console.log("test"));
 
-    /*
-    console.log(itemQuantity, itemQuantity.length);
-    for (let i = 0; i < itemQuantity.length; i++) {
-        console.log(itemQuantity[i]);
-    }*/
-//});
-
-    /*element.addEventListener("change", (e) => {
-        console.log("changement fait ");
-    });*/
-//let deleteItem = document.querySelectorAll(".deleteItem"); 
-//console.log(deleteItem);
-/*
-deleteItem.forEach(element => {
-
-    element.addEventListener('click' , function(){
-        console.log("test");
-    });
-});*/
-
-
-//Gestion de l'envoit de l'a commande
-
+//validation de la commande
 let commande = document.getElementById("order");
 commande.addEventListener('click',function (event) {
     event.preventDefault();  
     passageCommande();
-}   );
+});
 
 //Affiche le panier
 function affichagePanier(i, canape){
-    let tabAchat = JSON.parse(localStorage.getItem("article")); // récupère les valeurs du local storage et le met dans tabAchat
     document.getElementById("cart__items").innerHTML +=
             `<article class="cart__item" data-id="${tabAchat[i].id}" data-color="${tabAchat[i].color}">
             <div class="cart__item__img">
@@ -78,7 +55,21 @@ function affichagePanier(i, canape){
           `
 }
 
-async function passageCommande(){
+function modifyQuantity(){
+    let modifyQuantity = document.querySelectorAll(".itemQuantity");
+    let color;
+    modifyQuantity.forEach((article)=>
+        console.log(article),
+        //color = article.target.closest(".cart__item").dataset.color,
+        //console.log(color),
+    );
+}
+
+function passageCommande(){
+    let tabProducts = [];
+    for (i = 0; i<tabAchat.length; i++){
+        tabProducts.push(tabAchat[i].id);
+    }
     let contact = {
         firstName : document.getElementById("firstName").value,
         lastName : document.getElementById("lastName").value,
@@ -86,21 +77,26 @@ async function passageCommande(){
         city : document.getElementById("city").value,
         email : document.getElementById("email").value
     }
-    let tabArticle = JSON.parse(localStorage.getItem("article"));
-    let tabProduct = [];
-    for (i = 0; i<tabArticle.length; i++){
-        tabProduct.push(tabArticle[i].id);
-    }
+    let order = {
+    contact,
+    tabProducts
+    };
 
-    let response = await fetch("http://localhost:3000/api/products/order", {
+    console.log(order);
+    fetch("http://localhost:3000/api/products/order/", {
         method : "POST",
         headers: { 
-            'Content-Type': 'application/json' 
+            Accept : "application/json" ,
+            "Content-Type": "application/json",
             },
-        contact : JSON.stringify(contact),
-        productID : JSON.stringify(tabProduct)
-    });
+        body : JSON.stringify(order)
+    })
+        .then((response) => response.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(function(error) {
+            console.log("une erreur est survenue");
+        })
 
-    let result = await response.json();
-    alert(result.message);
 }
