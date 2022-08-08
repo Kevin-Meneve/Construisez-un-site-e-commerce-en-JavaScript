@@ -1,9 +1,10 @@
 let tabAchat = JSON.parse(localStorage.getItem("article")); // récupère les valeurs du local storage et le met dans tabAchat
 for ( let i=0 ; i < tabAchat.length ; i++){
-    fetch (`http://localhost:3000/api/products/${tabAchat[i].id}`)
+    setTimeout(function(){
+        fetch (`http://localhost:3000/api/products/${tabAchat[i].id}`)
         .then(function(res) {
             if (res.ok) {
-            return res.json();
+                return res.json();
             }
         })
         .then(function(canape){
@@ -11,11 +12,14 @@ for ( let i=0 ; i < tabAchat.length ; i++){
             
             if(i == tabAchat.length-1){
                 modifyQuantity();
+                deleteItem();
             } 
         })
         .catch(function(err) {
             // Une erreur est survenue
         });
+    },250*i);
+
 }
 
 //validation de la commande
@@ -53,13 +57,42 @@ function affichagePanier(i, canape){
 
 function modifyQuantity(){
     let modifyQuantity = document.querySelectorAll(".itemQuantity");
-    let color;
-    console.log(modifyQuantity.length);
-    modifyQuantity.forEach((article)=>
-        console.log(article),
-        //color = article.target.closest(".cart__item").dataset.color,
-        //console.log(color),
-    );
+    modifyQuantity.forEach(function (article){
+        article.addEventListener("change", (e) => {
+            let color = e.target.closest(".cart__item").dataset.color;
+            let id = e.target.closest(".cart__item").dataset.id;
+            let quantity = parseInt(e.target.value);
+            let i = 0;
+            while(tabAchat[i].id != id && tabAchat[i].color != color){
+                i++;
+            }
+            tabAchat[i].quantity = quantity.toString();
+            let stringAjoutPanier = JSON.stringify(tabAchat);
+            localStorage.setItem(`article` , stringAjoutPanier);
+            alert(`La quantité a bien été modifier`);
+        });
+    });
+}
+
+function deleteItem(){
+    let deleteItem = document.querySelectorAll(".deleteItem");
+    deleteItem.forEach(function (article){
+        article.addEventListener("click", (e) => {
+            let color = e.target.closest(".cart__item").dataset.color;
+            let id = e.target.closest(".cart__item").dataset.id;
+            let i = 0;
+            while(tabAchat[i].id != id && tabAchat[i].color != color){
+                i++;
+            }
+            e.target.closest(".cart__item").remove();
+            tabAchat.splice(i , 1);
+            let stringAjoutPanier = JSON.stringify(tabAchat);
+            localStorage.setItem(`article` , stringAjoutPanier);
+
+            alert(`L'article a bien été supprimé`);
+
+        });
+    });
 }
 
 function passageCommande(){
