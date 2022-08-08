@@ -10,10 +10,7 @@ for ( let i=0 ; i < tabAchat.length ; i++){
             affichagePanier(i, canape); //Affichage des informations du produit sur la page product
             
             if(i == tabAchat.length-1){
-                let modifyQuantity = document.querySelectorAll(".itemQuantity");
-                modifyQuantity.forEach((article)=>
-                    modifyQuantity(article),
-                )
+                modifyQuantity();
             } 
         })
         .catch(function(err) {
@@ -31,7 +28,7 @@ commande.addEventListener('click',function (event) {
 //Affiche le panier
 function affichagePanier(i, canape){
     document.getElementById("cart__items").innerHTML +=
-            `<article class="cart__item" data-id="${tabAchat[i].id}" data-color="${tabAchat[i].color}">
+        `<article class="cart__item" data-id="${tabAchat[i].id}" data-color="${tabAchat[i].color}">
             <div class="cart__item__img">
               <img src="${canape.imageUrl}" alt="${canape.altTxt}">
             </div>
@@ -51,13 +48,13 @@ function affichagePanier(i, canape){
                 </div>
               </div>
             </div>
-          </article>
-          `
+        </article>`
 }
 
 function modifyQuantity(){
     let modifyQuantity = document.querySelectorAll(".itemQuantity");
     let color;
+    console.log(modifyQuantity.length);
     modifyQuantity.forEach((article)=>
         console.log(article),
         //color = article.target.closest(".cart__item").dataset.color,
@@ -70,19 +67,18 @@ function passageCommande(){
     for (i = 0; i<tabAchat.length; i++){
         tabProducts.push(tabAchat[i].id);
     }
-    let contact = {
-        firstName : document.getElementById("firstName").value,
-        lastName : document.getElementById("lastName").value,
-        address : document.getElementById("address").value,
-        city : document.getElementById("city").value,
-        email : document.getElementById("email").value
-    }
-    let order = {
-    contact,
-    tabProducts
-    };
 
-    console.log(order);
+    let order = {
+        contact : {
+            firstName : document.getElementById("firstName").value,
+            lastName : document.getElementById("lastName").value,
+            address : document.getElementById("address").value,
+            city : document.getElementById("city").value,
+            email : document.getElementById("email").value,
+        },
+        products : tabProducts,
+    };
+    
     fetch("http://localhost:3000/api/products/order/", {
         method : "POST",
         headers: { 
@@ -93,7 +89,8 @@ function passageCommande(){
     })
         .then((response) => response.json())
         .then(data => {
-            console.log(data);
+            localStorage.clear();
+            window.location.assign(`./confirmation.html?orderId=${data.orderId}`);
         })
         .catch(function(error) {
             console.log("une erreur est survenue");
