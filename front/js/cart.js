@@ -51,7 +51,7 @@ function affichagePanier(i, canape){
               <div class="cart__item__content__description">
                 <h2>${canape.name}</h2>
                 <p>${tabAchat[i].color}</p>
-                <p>${canape.price} * ${tabAchat[i].quantity} €</p>
+                <p>${canape.price*tabAchat[i].quantity}€</p>
               </div>
               <div class="cart__item__content__settings">
                 <div class="cart__item__content__settings__quantity">
@@ -74,15 +74,21 @@ function modifyQuantity(){
             let color = e.target.closest(".cart__item").dataset.color;
             let id = e.target.closest(".cart__item").dataset.id;
             let quantity = parseInt(e.target.value);
-            let i = 0;
-            while(tabAchat[i].id != id && tabAchat[i].color != color){
-                i++;
+            if(0 < quantity && quantity < 101){
+                let i = 0;
+                while(tabAchat[i].id != id && tabAchat[i].color != color){
+                    i++;
+                }
+                tabAchat[i].quantity = quantity.toString();
+                let stringAjoutPanier = JSON.stringify(tabAchat);
+                localStorage.setItem(`article` , stringAjoutPanier);
+                alert(`La quantité a bien été modifier`);
+                window.location.reload(); //rafraichis la page pour mettre à jour le prix totale de l'article et du pannier
             }
-            tabAchat[i].quantity = quantity.toString();
-            let stringAjoutPanier = JSON.stringify(tabAchat);
-            localStorage.setItem(`article` , stringAjoutPanier);
-            alert(`La quantité a bien été modifier`);
-            printTotalPrice();
+            else
+            {
+                alert("Veuillez entrer une quantité entre 1 et 100");
+            }
         });
     });
 
