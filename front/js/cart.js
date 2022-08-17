@@ -51,7 +51,7 @@ function affichagePanier(i, canape){
               <div class="cart__item__content__description">
                 <h2>${canape.name}</h2>
                 <p>${tabAchat[i].color}</p>
-                <p>${canape.price} €</p>
+                <p>${canape.price} * ${tabAchat[i].quantity} €</p>
               </div>
               <div class="cart__item__content__settings">
                 <div class="cart__item__content__settings__quantity">
