@@ -138,6 +138,12 @@ function passageCommande(){
         },
         products : tabProducts,
     };
+
+    //Test les valeures insérés dans le formulaire
+    let test = testForm(order.contact);
+    if(test == false){
+        return;
+    }
     
     fetch("http://localhost:3000/api/products/order/", {
         method : "POST",
@@ -156,4 +162,81 @@ function passageCommande(){
             console.log("une erreur est survenue");
         })
 
+}
+
+function testForm(form){
+    isValid = true; //Booléen qui est changé à faux si un des champs du formulaire n'est pas valide
+    
+
+    /*Test regexName
+        1. Le nom ne doit pas contenir de chiffre
+        2. Le nom ne doit pas contenir de caractière spéciaux 
+        3. Le nom peut ne pas commencer par une majuscule 
+        4. Le nom peut avoir des espaces ou des tirets  (comme Jean Michel)
+        5. Les tirets et les espaces ne peuvent pas se trouver au début ou à la fin du nom
+    */
+    const regexName = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/;
+
+    //Test firstName
+    if ( regexName.test(form.firstName) == false)
+    {
+        document.getElementById("firstNameErrorMsg").innerHTML = "Veullez entrer un prénom valide";
+        isValid = false;
+    }
+    else{
+        document.getElementById("firstNameErrorMsg").innerHTML = "";
+    }
+
+    //Test lastName
+    if ( regexName.test(form.lastName) == false)
+    {
+        document.getElementById("lastNameErrorMsg").innerHTML = "Veullez entrer un nom valide";
+        isValid = false;
+    }
+    else{
+        document.getElementById("lastNameErrorMsg").innerHTML = "";
+    }
+
+    //Test city
+    if ( regexName.test(form.city) == false)
+    {
+        document.getElementById("cityErrorMsg").innerHTML = "Veullez entrer une ville valide";
+        isValid = false;
+    }
+    else{
+        document.getElementById("cityErrorMsg").innerHTML = "";
+    }
+
+    /* Test regexAddress
+        1. Il doit commencer par au moins un chiffre 
+        2. Ensuite il doit contenir une chaine de caractère pouvant commencer par un espace ou une virgule 
+        3. Après il doit contenir 5 chiffres 
+    */ 
+    const regexAddress = /([0-9]+) ?([a-zA-Z,\. ]+) ?([0-9]{5})/
+
+    //Test address
+    if ( regexAddress.test(form.address) == false)
+    {
+        document.getElementById("addressErrorMsg").innerHTML = "Veullez entrer une adresse valide";
+        isValid = false;
+    }
+    else{
+        document.getElementById("addressErrorMsg").innerHTML = "";
+    }
+
+    /*Test regexMail
+        1. L'email ne peut pas commencer ou finir par un point
+        2. L'email peut contenir un point avant le @ au milieu de la chaine de caractère
+        3. L'email peut contenir un double domaine (exemple : .de.org)   
+    */
+    const regexMail =/^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gm;
+    if (regexMail.test(form.email) == false)
+    {
+        document.getElementById("emailErrorMsg").innerHTML = "Veullez entrer une adresse mail valide";
+        isValid = false;
+    }
+    else{
+        document.getElementById("emailErrorMsg").innerHTML = "";
+    }
+    return isValid;
 }
