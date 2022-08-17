@@ -1,16 +1,25 @@
 let tabAchat = JSON.parse(localStorage.getItem("article")); // récupère les valeurs du local storage et le met dans tabAchat
-affichage()
-    .then(function(){
-        modifyQuantity();
-        deleteItem();
-        printTotalPrice();
+
+//Verifie si le pannier est vide
+if(tabAchat.length == 0){
+    document.getElementById("cart__items").innerHTML = "<h2>Votre pannier est vide</h2>";
+}
+else{
+    affichage()
+        .then(function(){
+            modifyQuantity();
+            deleteItem();
+            printTotalPrice();
+        });
+
+    //validation de la commande
+    let commande = document.getElementById("order");
+    commande.addEventListener('click',function (event) {
+        event.preventDefault();  
+        passageCommande();
     });
-//validation de la commande
-let commande = document.getElementById("order");
-commande.addEventListener('click',function (event) {
-    event.preventDefault();  
-    passageCommande();
-});
+}
+
 
 //affichage de la page 
 async function affichage(){
@@ -96,6 +105,9 @@ function deleteItem(){
             localStorage.setItem(`article` , stringAjoutPanier);
             alert(`L'article a bien été supprimé`);
             printTotalPrice();
+            if(tabAchat.length == 0){
+                window.location.reload(); // Rafraichis la page pour empecher l'envois du formulaire quand on a plus d'article
+            }
         });
     });
 
