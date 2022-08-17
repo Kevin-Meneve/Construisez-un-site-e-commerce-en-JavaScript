@@ -102,7 +102,7 @@ function deleteItem(){
             let color = e.target.closest(".cart__item").dataset.color;
             let id = e.target.closest(".cart__item").dataset.id;
             let i = 0;
-            while(tabAchat[i].id != id && tabAchat[i].color != color){
+            while(tabAchat[i].id != id || tabAchat[i].color != color){
                 i++;
             }
             e.target.closest(".cart__item").remove();
