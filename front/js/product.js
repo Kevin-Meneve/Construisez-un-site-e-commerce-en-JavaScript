@@ -33,6 +33,7 @@ function infosCanape(canape){
     for(let index in canape.colors){
         document.getElementById("colors").innerHTML += `<option value="${canape.colors[index]}">${canape.colors[index]}</option>`;
     }
+    document.querySelector("title").innerText = `${canape.name}`;
 }
 
 //Ajoute les information du cannapé dans le local storage
@@ -86,6 +87,8 @@ function ajoutPanier(){
     //Ajout du nouvel article
     if (unique == true){
     tabAchat.push(choix);
+    console.log(tabAchat);
+    //tabAchat.sort((a , b) => a.id - b.id);
     let stringAjoutPanier = JSON.stringify(tabAchat);
     localStorage.setItem(`article` , stringAjoutPanier);
     alert(`Le produit a bien été ajouté au panier`);
