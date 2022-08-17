@@ -1,7 +1,20 @@
 let tabAchat = JSON.parse(localStorage.getItem("article")); // récupère les valeurs du local storage et le met dans tabAchat
-for ( let i=0 ; i < tabAchat.length ; i++){
-    setTimeout(function(){
-        fetch (`http://localhost:3000/api/products/${tabAchat[i].id}`)
+affichage()
+    .then(function(){
+        modifyQuantity();
+        deleteItem();
+        printTotalPrice();
+    });
+//validation de la commande
+let commande = document.getElementById("order");
+commande.addEventListener('click',function (event) {
+    event.preventDefault();  
+    passageCommande();
+});
+
+async function affichage(){
+    for ( let i=0 ; i < tabAchat.length ; i++){
+        await fetch (`http://localhost:3000/api/products/${tabAchat[i].id}`)
         .then(function(res) {
             if (res.ok) {
                 return res.json();
@@ -9,25 +22,13 @@ for ( let i=0 ; i < tabAchat.length ; i++){
         })
         .then(function(canape){
             affichagePanier(i, canape); //Affichage des informations du produit sur la page product
-            
-            if(i == tabAchat.length-1){
-                modifyQuantity();
-                deleteItem();
-            } 
         })
         .catch(function(err) {
             // Une erreur est survenue
         });
-    },250*i);
 
+    }
 }
-
-//validation de la commande
-let commande = document.getElementById("order");
-commande.addEventListener('click',function (event) {
-    event.preventDefault();  
-    passageCommande();
-});
 
 //Affiche le panier
 function affichagePanier(i, canape){
@@ -70,8 +71,10 @@ function modifyQuantity(){
             let stringAjoutPanier = JSON.stringify(tabAchat);
             localStorage.setItem(`article` , stringAjoutPanier);
             alert(`La quantité a bien été modifier`);
+            printTotalPrice();
         });
     });
+
 }
 
 function deleteItem(){
@@ -88,11 +91,35 @@ function deleteItem(){
             tabAchat.splice(i , 1);
             let stringAjoutPanier = JSON.stringify(tabAchat);
             localStorage.setItem(`article` , stringAjoutPanier);
-
             alert(`L'article a bien été supprimé`);
-
+            printTotalPrice();
         });
     });
+
+}
+
+async function printTotalPrice(){
+    let priceTotal = 0;
+    let quantityTotal = 0;
+    for ( let i=0 ; i < tabAchat.length ; i++){
+        await fetch (`http://localhost:3000/api/products/${tabAchat[i].id}`)
+        .then(function(res) {
+            if (res.ok) {
+                return res.json();
+            }
+        })
+        .then(function(canape){
+            priceTotal += parseInt(canape.price) * parseInt(tabAchat[i].quantity);
+            quantityTotal += parseInt(tabAchat[i].quantity);
+            
+        })
+        .catch(function(err) {
+            // Une erreur est survenue
+        });
+    }
+    document.getElementById("totalQuantity").innerText = quantityTotal;
+    document.getElementById("totalPrice").innerText = priceTotal;
+
 }
 
 function passageCommande(){
