@@ -12,6 +12,7 @@ commande.addEventListener('click',function (event) {
     passageCommande();
 });
 
+//affichage de la page 
 async function affichage(){
     for ( let i=0 ; i < tabAchat.length ; i++){
         await fetch (`http://localhost:3000/api/products/${tabAchat[i].id}`)
@@ -56,6 +57,7 @@ function affichagePanier(i, canape){
         </article>`
 }
 
+//Modification de la quantité d'un article
 function modifyQuantity(){
     let modifyQuantity = document.querySelectorAll(".itemQuantity");
     modifyQuantity.forEach(function (article){
@@ -77,6 +79,7 @@ function modifyQuantity(){
 
 }
 
+//Suppression d'un article
 function deleteItem(){
     let deleteItem = document.querySelectorAll(".deleteItem");
     deleteItem.forEach(function (article){
@@ -98,6 +101,7 @@ function deleteItem(){
 
 }
 
+//Affichage du prix total 
 async function printTotalPrice(){
     let priceTotal = 0;
     let quantityTotal = 0;
@@ -122,6 +126,7 @@ async function printTotalPrice(){
 
 }
 
+//Envoit de la commande à l'API
 function passageCommande(){
     let tabProducts = [];
     for (i = 0; i<tabAchat.length; i++){
@@ -164,6 +169,7 @@ function passageCommande(){
 
 }
 
+//Fonction qui test le formulaire
 function testForm(form){
     isValid = true; //Booléen qui est changé à faux si un des champs du formulaire n'est pas valide
     

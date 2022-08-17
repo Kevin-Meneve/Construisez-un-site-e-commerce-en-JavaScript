@@ -76,13 +76,14 @@ function ajoutPanier(){
                 return 0;
             }
             
-            
+            // Ajout de la quantité à la quantité déjà enregistré
             let stringAjoutPanier = JSON.stringify(tabAchat);
             localStorage.setItem(`article` , stringAjoutPanier);
             alert(`La quantité du produit selectionné a été ajouté à la quantité déjà selectionné dans le panier pour un totale de ${tabAchat[i].quantity}`);
             break;
         }
     }
+    //Ajout du nouvel article
     if (unique == true){
     tabAchat.push(choix);
     let stringAjoutPanier = JSON.stringify(tabAchat);
