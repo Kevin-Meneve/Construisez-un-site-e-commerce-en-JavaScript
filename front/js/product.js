@@ -62,7 +62,7 @@ function ajoutPanier(){
     let tabAchat = JSON.parse(localStorage.getItem("article")); // récupère les valeurs du local storage et le met dans tabAchat
 
     if(tabAchat == null){
-        tabAchat = []
+        tabAchat = [];
     }
     let unique = true; //boolean qui vérifie si l'article est unique dans le local storage
 
@@ -87,10 +87,48 @@ function ajoutPanier(){
     //Ajout du nouvel article
     if (unique == true){
     tabAchat.push(choix);
-    console.log(tabAchat);
-    //tabAchat.sort((a , b) => a.id - b.id);
+
+    console.log(tabAchat)
+
+    //fonction de tri pour que les canapes soient classé dans la page cart
+    tabAchat.sort(function(a , b){
+        if(a.id < b.id)
+        {
+            return 1;
+        }
+        else
+        {
+            if(a.id == b.id)
+            {
+                return 0;
+            }
+            if(a.id > b.id)
+            {
+                return -1;
+            }
+        }
+    });
+
     let stringAjoutPanier = JSON.stringify(tabAchat);
     localStorage.setItem(`article` , stringAjoutPanier);
     alert(`Le produit a bien été ajouté au panier`);
     }
+}
+
+function sortId(canape1 , canape2 ){
+    if(canape1.id < canape2.id)
+        {
+            return 1;
+        }
+        else
+        {
+            if(canape1.id == canape2.id)
+            {
+                return 0;
+            }
+            if(canape1.id > canape2.id)
+            {
+                return -1;
+            }
+        }
 }
