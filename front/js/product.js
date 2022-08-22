@@ -13,7 +13,7 @@ fetch (`http://localhost:3000/api/products/${idURL}`)
         infosCanape(canape); //Affichage des informations du produit sur la page product
     })
     .catch(function(err) {
-        // Une erreur est survenue
+        alert("Erreur lors de la recupération des données ! Réessayer plus tard");
     });
 
 //Gestion d'ajout au panier
@@ -90,8 +90,9 @@ function ajoutPanier(){
 
     console.log(tabAchat)
 
-    //fonction de tri pour que les canapes soient classé dans la page cart
+    
     tabAchat.sort(function(a , b){
+        //fonction de tri pour que les canapes soient classé dans la page cart
         if(a.id < b.id)
         {
             return 1;

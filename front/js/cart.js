@@ -1,8 +1,8 @@
 let tabAchat = JSON.parse(localStorage.getItem("article")); // récupère les valeurs du local storage et le met dans tabAchat
 
-//Verifie si le pannier est vide
+//Verifie si le panier est vide
 if(tabAchat.length == 0){
-    document.getElementById("cart__items").innerHTML = "<h2>Votre pannier est vide</h2>";
+    document.getElementById("cart__items").innerHTML = "<h2>Votre panier est vide</h2>";
 }
 else{
     affichage()
@@ -34,7 +34,7 @@ async function affichage(){
             affichagePanier(i, canape); //Affichage des informations du produit sur la page product
         })
         .catch(function(err) {
-            // Une erreur est survenue
+            console.log("Erreur lors de la recupération des données ! Réessayer plus tard");
         });
 
     }
@@ -83,7 +83,7 @@ function modifyQuantity(){
                 let stringAjoutPanier = JSON.stringify(tabAchat);
                 localStorage.setItem(`article` , stringAjoutPanier);
                 alert(`La quantité a bien été modifier`);
-                window.location.reload(); //rafraichis la page pour mettre à jour le prix totale de l'article et du pannier
+                window.location.reload(); //rafraichis la page pour mettre à jour le prix totale de l'article et du panier
             }
             else
             {
@@ -182,7 +182,7 @@ function passageCommande(){
             window.location.assign(`./confirmation.html?orderId=${data.orderId}`);
         })
         .catch(function(error) {
-            console.log("une erreur est survenue");
+            alert("une erreur est survenue lors de l'envoie des données");
         })
 
 }

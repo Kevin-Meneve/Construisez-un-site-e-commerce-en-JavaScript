@@ -9,7 +9,7 @@ fetch ("http://localhost:3000/api/products")
         affichageCanape(listeCanape);
     })
     .catch(function(err) {
-        // Une erreur est survenue
+        alert("Erreur lors de la recupération des données ! Réessayer plus tard");
     });
 
 //Affichage des produits sur la page d'index
