@@ -88,8 +88,6 @@ function ajoutPanier(){
     if (unique == true){
     tabAchat.push(choix);
 
-    console.log(tabAchat)
-
     
     tabAchat.sort(function(a , b){
         //fonction de tri pour que les canapes soient classé dans la page cart
@@ -114,22 +112,4 @@ function ajoutPanier(){
     localStorage.setItem(`article` , stringAjoutPanier);
     alert(`Le produit a bien été ajouté au panier`);
     }
-}
-
-function sortId(canape1 , canape2 ){
-    if(canape1.id < canape2.id)
-        {
-            return 1;
-        }
-        else
-        {
-            if(canape1.id == canape2.id)
-            {
-                return 0;
-            }
-            if(canape1.id > canape2.id)
-            {
-                return -1;
-            }
-        }
 }
